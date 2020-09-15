@@ -12,7 +12,7 @@ setuptools.setup(
     author_email="leavantuan2312@gmail.com",
     packages=setuptools.find_packages(),
     long_description=long_description,
-    download_url="https://github.com/lagranges/people_also_ask/archive/0.0.1.tar.gz",
+    download_url="https://github.com/lagranges/people_also_ask/archive/0.0.2.tar.gz",
     install_requires=[
         "beautifulsoup4",
         "requests",
