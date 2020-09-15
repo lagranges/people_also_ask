@@ -4,7 +4,7 @@ Global realted-questions exception and warning classes.
 """
 
 
-GITHUB_LINK = "Github"
+GITHUB_LINK = "https://github.com/lagranges/people_also_ask"
 
 
 class RelatedQuestionError(Exception):
