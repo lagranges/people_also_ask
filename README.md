@@ -1,4 +1,4 @@
-# Google-Play-Scraper
+# People-also-ask Api
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
 [![PyPI](https://img.shields.io/pypi/v/people_also_ask.svg)](https://pypi.org/project/people-also-ask)
