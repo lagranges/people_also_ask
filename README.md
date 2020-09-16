@@ -2,7 +2,6 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
 [![PyPI](https://img.shields.io/pypi/v/people_also_ask.svg)](https://pypi.org/project/people-also-ask)
-[![downloads](https://img.shields.io/pypi/dm/people_also_ask.svg)](https://pypistats.org/packages/people-also-ask)
 [![versions](https://img.shields.io/pypi/pyversions/people_also_ask.svg)](https://github.com/lagranges/people_also_ask)
 
 People-also-ask provides APIs to easily crawl the data of google featured snippet.
