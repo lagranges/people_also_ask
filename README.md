@@ -89,7 +89,7 @@ people_also_ask.get_simple_answer("Why is coffee bad for you?")
 ```
 
 
-### Generate questions and answer around a subject
+### Generate questions and answers relative to a subject
 ```python
 people_also_ask.generate_answer("coffee")
 ```
