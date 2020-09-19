@@ -132,7 +132,7 @@ class SimpleFeaturedSnippetParser(FeaturedSnippetParser):
     def snippet_str(self):
         lines = []
         for field in (
-            "heading", "snippet_str_body", "snippet_str_body",
+            "heading", "snippet_str_body",
             "displayed_link", "link", "title"
         ):
             if getattr(self, field):
@@ -171,7 +171,7 @@ class TableFeaturedSnippetParser(SimpleFeaturedSnippetParser):
 
     @property
     def response(self):
-        return self.snippet_str
+        return self.snippet_str_body
 
     @property
     def snippet_data(self):
@@ -206,7 +206,7 @@ class OrderedFeaturedSnippetParser(SimpleFeaturedSnippetParser):
 
     @property
     def response(self):
-        return self.snippet_str
+        return self.snippet_str_body
 
     @property
     def snippet_str_body(self):
@@ -232,7 +232,7 @@ class UnorderedFeaturedSnippetParser(SimpleFeaturedSnippetParser):
 
     @property
     def response(self):
-        return self.snippet_str
+        return self.snippet_str_body
 
     @property
     def snippet_data(self):
