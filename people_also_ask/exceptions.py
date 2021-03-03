@@ -65,3 +65,31 @@ class GoogleSearchRequestFailedError(RelatedQuestionError):
         return (
             f"Failed to requests {self.url}/{self.keyword}"
         )
+
+
+class InvalidQuestionInputFileError(RelatedQuestionError):
+    """Exception raised when user enter an invalid question input"""
+    """ for data collector """
+
+    def __init__(self, input_file, message):
+        self.input_file = input_file
+        self.message = message
+
+    def __unicode__(self):
+        return (
+            f"Invalid input file: {self.input_file}\n{message}"
+        )
+
+
+class FailedToWriteOuputFileError(RelatedQuestionError):
+    """Exception raised when program fails to write data to """
+    """ output file for data colletor"""
+
+    def __init__(self, output_file, message):
+        self.output_file = output_file
+        self.message = message
+
+    def __unicode__(self):
+        return (
+            f"Cannot write to {self.output_file}\n{message}"
+        )
