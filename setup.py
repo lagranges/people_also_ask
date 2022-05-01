@@ -12,7 +12,7 @@ def local_file(file):
 
 setuptools.setup(
     name="people_also_ask",
-    version="0.0.6",
+    version="1.0.0",
     author="LE Van Tuan",
     author_email="leavantuan2312@gmail.com",
     packages=setuptools.find_packages(),
