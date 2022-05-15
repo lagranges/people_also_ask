@@ -33,6 +33,7 @@ setuptools.setup(
     install_requires=[
         "beautifulsoup4",
         "requests",
+        "jinja2",
     ],
     python_requires=">=3.6"
 )

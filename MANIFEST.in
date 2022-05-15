@@ -1,0 +1,1 @@
+include plugins/article_generator/templates/*.html

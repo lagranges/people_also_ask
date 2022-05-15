@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <a> {{ introduction}}</a>
+    <ul class="sitemap">
+    {%- for item in contents recursive %}
+        <li>
+            <a href="{{ '#' + get_question_id(item) }}">{{ item}}</a>
+        </li>
+    {%- endfor %}
+    </ul>
+    {% for question, answer in contents.items() -%}
+        <div id="{{ get_question_id(question) }}">
+            <h2>{{ question }}</h2>
+        </div>
+        <a>{{ answer }}</a>
+    {% endfor %}
+</body>
+</html>

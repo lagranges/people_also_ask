@@ -40,7 +40,7 @@ semaphore = CallingSemaphore(
 )
 
 
-@retryable(3)
+@retryable(1)
 def search(keyword: str) -> Optional[BeautifulSoup]:
     """return html parser of google search result"""
     params = {"q": keyword, "gl": "us"}
@@ -49,8 +49,11 @@ def search(keyword: str) -> Optional[BeautifulSoup]:
             time.sleep(0.5)  # be nice with google :)
             response = SESSION.get(URL, params=params, headers=HEADERS)
     except Exception:
+        import traceback
+        traceback.print_exc()
         raise GoogleSearchRequestFailedError(URL, keyword)
     if response.status_code != 200:
+        print(response.content)
         raise GoogleSearchRequestFailedError(URL, keyword)
     return BeautifulSoup(response.text, "html.parser")
 
