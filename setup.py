@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import codecs
 import os
-import re
 import setuptools
 
 
@@ -12,7 +11,7 @@ def local_file(file):
 
 setuptools.setup(
     name="people_also_ask",
-    version="1.0.0",
+    version="1.1.0",
     author="LE Van Tuan",
     author_email="leavantuan2312@gmail.com",
     packages=setuptools.find_packages(),

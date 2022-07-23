@@ -93,3 +93,17 @@ people_also_ask.get_simple_answer("Why is coffee bad for you?")
 ```python
 people_also_ask.generate_answer("coffee")
 ```
+
+
+### Using proxies
+
+```python
+import people_also_ask.request.session
+
+people_also_ask.request.session.set_proxies(
+    (
+        "http://1234.5.6.7:8080",
+        "http://1237.5.6.7:8080",
+    )
+)
+```

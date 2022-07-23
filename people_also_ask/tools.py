@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 import time
+import random
 import traceback
 from contextlib import ContextDecorator
 from typing import Callable, List
@@ -76,7 +77,7 @@ class CallingSemaphore(ContextDecorator):
                 lambda x: now - x < self.expired_time,
                 self.called_timestamps
             ))
-            time.sleep(0.5)
+            time.sleep(random.random() * 2)
         self.called_timestamps.append(time.time())
 
     def __exit__(self, *exc):

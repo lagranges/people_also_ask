@@ -1,4 +1,4 @@
-import unittest
+import pytest
 from people_also_ask import google
 
 
@@ -12,20 +12,14 @@ config = dict(
 )
 
 
-class TestGoogle(unittest.TestCase):
-
-    def test_get_answer(self):
-        answer = google.get_answer(config["test_get_answer"]["text"])
-        self.assertIsNotNone(answer)
-        self.assertIsNotNone(answer["response"])
-
-    def test_get_related_questions(self):
-        related_questions = google.get_related_questions(
-            config["test_get_related_questions"]["text"]
-        )
-        self.assertIsNotNone(related_questions)
-        self.assertTrue(len(related_questions) > 0)
+def test_get_answer():
+    answer = google.get_answer(config["test_get_answer"]["text"])
+    assert "response" in answer
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_get_related_questions():
+    related_questions = google.get_related_questions(
+        config["test_get_related_questions"]["text"]
+    )
+    assert len(related_questions) > 0
+

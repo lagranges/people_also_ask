@@ -13,7 +13,7 @@ class RelatedQuestionError(Exception):
     def __init__(self, error):
         self.error = error
 
-    def __unicode__(self):
+    def __repr__(self):
         return (
             f'An unkown error occured: {self.error}.'
             f' Please report it on {GITHUB_LINK}.'
@@ -29,7 +29,7 @@ class FeaturedSnippetParserError(RelatedQuestionError):
     def __init__(self, text):
         self.keyword = text
 
-    def __unicode__(self):
+    def __repr__(self):
         return (
             f"Cannot parse result page of '{self.text}'."
             f" It mays due to a format change of result page."
@@ -46,7 +46,7 @@ class RelatedQuestionParserError(RelatedQuestionError):
     def __init__(self, text):
         self.keyword = text
 
-    def __unicode__(self):
+    def __repr__(self):
         return (
             f"Cannot parse result page of '{self.text}'."
             f" It mays due to a format change of result page."
@@ -57,13 +57,15 @@ class RelatedQuestionParserError(RelatedQuestionError):
 class GoogleSearchRequestFailedError(RelatedQuestionError):
     """Exception raised when failed to request search on google"""
 
-    def __init__(self, url, keyword):
+    def __init__(self, url, keyword, message):
         self.url = url
         self.keyword = keyword
+        self.message = message
 
-    def __unicode__(self):
+    def __repr__(self):
         return (
             f"Failed to requests {self.url}/{self.keyword}"
+            f"\n{self.message}"
         )
 
 
@@ -75,9 +77,9 @@ class InvalidQuestionInputFileError(RelatedQuestionError):
         self.input_file = input_file
         self.message = message
 
-    def __unicode__(self):
+    def __repr__(self):
         return (
-            f"Invalid input file: {self.input_file}\n{message}"
+            f"Invalid input file: {self.input_file}\n{self.message}"
         )
 
 
@@ -89,7 +91,25 @@ class FailedToWriteOuputFileError(RelatedQuestionError):
         self.output_file = output_file
         self.message = message
 
-    def __unicode__(self):
+    def __repr__(self):
         return (
-            f"Cannot write to {self.output_file}\n{message}"
+            f"Cannot write to {self.output_file}\n{self.message}"
+        )
+
+
+class RequestError(RelatedQuestionError):
+    """Exception raised when failed to request"""
+
+    def __init__(self, url, params, proxies, message):
+        self.url = url
+        self.keyword = params
+        self.proxies = proxies
+        self.message = message
+
+    def __repr__(self):
+        return (
+            f"Failed to requests {self.url}"
+            f"\nParams = {self.params}"
+            f"\nProxy = {self.proxies}"
+            f"\nResp = {self.message}"
         )

@@ -1,60 +1,26 @@
 #! /usr/bin/env python3
-import os
 import sys
-import time
-import logging
-import requests
 from bs4 import BeautifulSoup
 from typing import List, Dict, Any, Optional, Generator
 
-from people_also_ask.tools import retryable
 from people_also_ask.parser import (
     extract_related_questions,
     get_featured_snippet_parser,
 )
 from people_also_ask.exceptions import (
-    GoogleSearchRequestFailedError,
     RelatedQuestionParserError,
     FeaturedSnippetParserError
 )
-from people_also_ask.tools import CallingSemaphore
+from people_also_ask.request import get
 
 
 URL = "https://www.google.com/search"
-HEADERS = {
-    'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-    " AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/84.0.4147.135 Safari/537.36"
-}
-SESSION = requests.Session()
-NB_TIMES_RETRY = 3
-NB_REQUESTS_LIMIT = os.environ.get(
-    "RELATED_QUESTION_NBREQUESTS_LIMIT", 25
-)
-NB_REQUESTS_DURATION_LIMIT = os.environ.get(
-    "RELATED_QUESTION_DURATION_LIMIT", 60  # seconds
-)
-logging.basicConfig()
-semaphore = CallingSemaphore(
-    NB_REQUESTS_LIMIT, NB_REQUESTS_DURATION_LIMIT
-)
 
 
-@retryable(1)
 def search(keyword: str) -> Optional[BeautifulSoup]:
     """return html parser of google search result"""
     params = {"q": keyword, "gl": "us"}
-    try:
-        with semaphore:
-            time.sleep(0.5)  # be nice with google :)
-            response = SESSION.get(URL, params=params, headers=HEADERS)
-    except Exception:
-        import traceback
-        traceback.print_exc()
-        raise GoogleSearchRequestFailedError(URL, keyword)
-    if response.status_code != 200:
-        print(response.content)
-        raise GoogleSearchRequestFailedError(URL, keyword)
+    response = get(URL, params=params)
     return BeautifulSoup(response.text, "html.parser")
 
 
