@@ -10,8 +10,6 @@ from people_also_ask.tools import CallingSemaphore
 from people_also_ask.exceptions import RequestError
 
 from requests import Session as _Session
-from random_user_agent.user_agent import UserAgent
-from random_user_agent.params import SoftwareName, OperatingSystem
 
 
 SESSION = _Session()
@@ -28,38 +26,14 @@ logging.basicConfig()
 semaphore = CallingSemaphore(
     NB_REQUESTS_LIMIT, NB_REQUESTS_DURATION_LIMIT
 )
+HEADERS = {
+    'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    " AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/84.0.4147.135 Safari/537.36"
+}
 
 
 logger = logging.getLogger(__name__)
-
-
-class HeadersGenerator:
-
-    SOFTWARE_NAMES = [
-        SoftwareName.CHROME.value, SoftwareName.FIREFOX,
-    ]
-    OPERATING_SYSTEMS = [
-        OperatingSystem.WINDOWS.value,
-    ]
-    USER_AGENT_LIMIT = 200
-
-    def __init__(self):
-        self.cookie = os.environ.get("PAA_COOKIE_FILEPATH")
-        self.user_agent_rotator = UserAgent(
-            software_names=self.SOFTWARE_NAMES,
-            operating_systems=self.OPERATING_SYSTEMS,
-            limit=self.USER_AGENT_LIMIT,
-        )
-
-    def get(self):
-        headers = {
-            "User-Agent": self.user_agent_rotator.get_random_user_agent(),
-        }
-        if self.cookie:
-            with open(self.cookie, "r") as fd:
-                headers["Cookie"] = fd.read()
-
-        return headers
 
 
 class ProxyGeneator:
@@ -101,20 +75,18 @@ def set_proxies(proxies: Optional[tuple]) -> ProxyGeneator:
     PROXY_GENERATORS = ProxyGeneator(proxies=proxies)
 
 
-HEADERS_GENERATORS = HeadersGenerator()
 set_proxies(proxies=_load_proxies())
 
 
 @retryable(NB_TIMES_RETRY)
 def get(url: str, params) -> requests.Response:
     proxies = PROXY_GENERATORS.get()
-    headers = HEADERS_GENERATORS.get()
     try:
         with semaphore:
             response = SESSION.get(
                 url,
                 params=params,
-                headers=headers,
+                headers=HEADERS,
                 proxies=proxies,
             )
     except Exception:
