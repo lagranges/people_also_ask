@@ -14,8 +14,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--input-file", "-i", help="input file which is a txt file containing list of questions", required=True)
-    parser.add_argument("--output-file", "-o", help="output file which is .json file containing a dictionnary of question: answer", required=True)
-    parser.add_argument("--proxy-file", "-p", help="proxy file containing list of proxy")
+    parser.add_argument("--output-file", "-o", help="output file which is .json file containing a dictionary of question: answer", required=True)
 
     return parser.parse_args()
 
@@ -66,8 +65,7 @@ def collect_data(input_file, output_file):
 
 def main():
     args = parse_args()
-    collect_data(args.input_file, args.output_file, args.proxy_file)
-
+    collect_data(args.input_file, args.output_file)
 
 if __name__ == "__main__":
     main()
