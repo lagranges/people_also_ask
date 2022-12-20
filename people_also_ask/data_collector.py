@@ -48,23 +48,20 @@ def collect_one_question(question):
     return {question: answer}
 
 
-def collect_data(input_file, output_file, proxy_file=None):
+def collect_data(input_file, output_file):
     questions = read_questions(input_file)
-    nb_questions = len(questions)
-    counter = 0
     data = {}
+
+    counter = 0
+
     start_time = time.time()
-    end_time = None
-    if proxy_file is None:
-        for question in questions:
-            counter += 1
-            print(f"COLLECTING {counter}/{nb_questions}")
-            data.update(collect_one_question(question))
-    end_time = time.time()
-    collect_time = (end_time - start_time) / 60  #  minutes
-    print(
-        f"Collected answers for {nb_questions} questions in {collect_time} minutes"
-        )
+    for question in questions:
+        counter += 1
+        print(f"COLLECTING {counter}/{len(questions)}")
+        data.update(collect_one_question(question))
+    collect_time = (time.time() - start_time) / 60  #  minutes
+
+    print(f"Collected answers for {len(questions)} questions in {collect_time} minutes")
     write_question_answers(output_file, data)
 
 def main():
