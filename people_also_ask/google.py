@@ -13,9 +13,7 @@ from people_also_ask.exceptions import (
 )
 from people_also_ask.request import get
 
-
 URL = "https://www.google.com/search"
-
 
 def search(keyword: str) -> Optional[BeautifulSoup]:
     """return html parser of google search result"""
@@ -43,7 +41,7 @@ def _get_related_questions(text: str) -> List[str]:
 def generate_related_questions(text: str) -> Generator[str, None, None]:
     """
     generate the questions related to text,
-    these quetions are found recursively
+    these questions are found recursively
 
     :param str text: text to search
     """
@@ -130,7 +128,7 @@ def get_simple_answer(question: str, depth: bool = False) -> str:
     """
     return a text as summary answer for the question
 
-    :param str question: asked quetion
+    :param str question: asked question
     :param bool depth: return the answer of first related question
         if no answer found for question
     """
