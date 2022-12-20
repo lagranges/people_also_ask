@@ -18,8 +18,6 @@ def extract_related_questions(document: BeautifulSoup) -> List[str]:
     if not related_questions:
         return []
     extract_question = lambda a: a.text.split('Search for:')[0]
-    for q in related_questions:
-        print(q.text)
     return list(map(extract_question, related_questions))
 
 
