@@ -53,10 +53,8 @@ class ProxyGeneator:
         if not self.proxies:
             return {}
         proxy = next(self.iter_proxy)
-        if not proxy.startswith("https"):
-            proxy = f"http://{proxy}"
         return {
-            "https": proxy
+            "http": proxy
         }
 
 
