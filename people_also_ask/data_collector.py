@@ -14,8 +14,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--input-file", "-i", help="input file which is a txt file containing list of questions", required=True)
-    parser.add_argument("--output-file", "-o", help="output file which is .json file containing a dictionnary of question: answer", required=True)
-    parser.add_argument("--proxy-file", "-p", help="proxy file containing list of proxy")
+    parser.add_argument("--output-file", "-o", help="output file which is .json file containing a dictionary of question: answer", required=True)
 
     return parser.parse_args()
 
@@ -48,29 +47,25 @@ def collect_one_question(question):
     return {question: answer}
 
 
-def collect_data(input_file, output_file, proxy_file=None):
+def collect_data(input_file, output_file):
     questions = read_questions(input_file)
-    nb_questions = len(questions)
-    counter = 0
     data = {}
+
+    counter = 0
+
     start_time = time.time()
-    end_time = None
-    if proxy_file is None:
-        for question in questions:
-            counter += 1
-            print(f"COLLECTING {counter}/{nb_questions}")
-            data.update(collect_one_question(question))
-    end_time = time.time()
-    collect_time = (end_time - start_time) / 60  #  minutes
-    print(
-        f"Collected answers for {nb_questions} questions in {collect_time} minutes"
-        )
+    for question in questions:
+        counter += 1
+        print(f"COLLECTING {counter}/{len(questions)}")
+        data.update(collect_one_question(question))
+    collect_time = (time.time() - start_time) / 60  #  minutes
+
+    print(f"Collected answers for {len(questions)} questions in {collect_time} minutes")
     write_question_answers(output_file, data)
 
 def main():
     args = parse_args()
-    collect_data(args.input_file, args.output_file, args.proxy_file)
-
+    collect_data(args.input_file, args.output_file)
 
 if __name__ == "__main__":
     main()
