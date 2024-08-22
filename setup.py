@@ -33,6 +33,7 @@ setuptools.setup(
         "beautifulsoup4",
         "requests",
         "jinja2",
+	"fake-useragent"
     ],
     python_requires=">=3.6"
 )
