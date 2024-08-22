@@ -12,24 +12,37 @@ from people_also_ask.exceptions import (
     FeaturedSnippetParserError
 )
 from people_also_ask.request import get
+from people_also_ask.request.session import user_agent
+
 
 URL = "https://www.google.com/search"
 
-def search(keyword: str) -> Optional[BeautifulSoup]:
+
+def search(keyword: str, url: str = URL) -> Optional[BeautifulSoup]:
     """return html parser of google search result"""
-    params = {"q": keyword, "gl": "us"}
-    response = get(URL, params=params)
+    browser = user_agent['browser']
+    params = {"client": browser,
+              "q": keyword,
+              "sourceid": browser,
+              "ie": "UTF-8",
+              "oe": "UTF-8"}
+
+    response = get(url, params=params)
+
     return BeautifulSoup(response.text, "html.parser")
 
 
-def _get_related_questions(text: str) -> List[str]:
+def _get_related_questions(text: str, domain: str="com") -> List[str]:
     """
     return a list of questions related to text.
     These questions are from search result of text
 
     :param str text: text to search
+    :param str domain: specify google domain to improve searching in a native language
     """
-    document = search(text)
+
+    url = f"https://www.google.{domain}/search"
+    document = search(text, url=url)
     if not document:
         return []
     try:
@@ -38,35 +51,37 @@ def _get_related_questions(text: str) -> List[str]:
         raise RelatedQuestionParserError(text)
 
 
-def generate_related_questions(text: str) -> Generator[str, None, None]:
+def generate_related_questions(text: str, domain: str="com") -> Generator[str, None, None]:
     """
     generate the questions related to text,
-    these questions are found recursively
+    these quetions are found recursively
 
     :param str text: text to search
+    :param str domain: specify google domain to improve searching in a native language
     """
-    questions = set(_get_related_questions(text))
+    questions = set(_get_related_questions(text, domain=domain))
     searched_text = set(text)
     while questions:
         text = questions.pop()
         yield text
         searched_text.add(text)
-        questions |= set(_get_related_questions(text))
+        questions |= set(_get_related_questions(text, domain=domain))
         questions -= searched_text
 
 
-def get_related_questions(text: str, max_nb_questions: Optional[int] = None):
+def get_related_questions(text: str, max_nb_questions: Optional[int] = None, domain: str="com"):
     """
     return a number of questions related to text.
     These questions are found recursively.
 
     :param str text: text to search
+    :param str domain: specify google domain to improve searching in a native language
     """
     if max_nb_questions is None:
-        return _get_related_questions(text)
+        return _get_related_questions(text, domain=domain)
     nb_question_regenerated = 0
     questions = set()
-    for question in generate_related_questions(text):
+    for question in generate_related_questions(text, domain=domain):
         if nb_question_regenerated > max_nb_questions:
             break
         questions.add(question)
@@ -74,13 +89,16 @@ def get_related_questions(text: str, max_nb_questions: Optional[int] = None):
     return list(questions)
 
 
-def get_answer(question: str) -> Dict[str, Any]:
+def get_answer(question: str, domain: str="com") -> Dict[str, Any]:
     """
     return a dictionary as answer for a question.
 
     :param str question: asked question
+    :param str domain: specify google domain to improve searching in a native language
     """
-    document = search(question)
+
+    url = f"https://www.google.{domain}/search"
+    document = search(question, url=url)
     related_questions = extract_related_questions(document)
     featured_snippet = get_featured_snippet_parser(
             question, document)
@@ -103,36 +121,40 @@ def get_answer(question: str) -> Dict[str, Any]:
     return res
 
 
-def generate_answer(text: str) -> Generator[dict, None, None]:
+def generate_answer(text: str, domain: str="com") -> Generator[dict, None, None]:
     """
     generate answers of questions related to text
 
     :param str text: text to search
+    :param str domain: specify google domain to improve searching in a native language
     """
-    answer = get_answer(text)
+    answer = get_answer(text, domain)
     questions = set(answer["related_questions"])
     searched_text = set(text)
     if answer["has_answer"]:
         yield answer
     while questions:
         text = questions.pop()
-        answer = get_answer(text)
+        answer = get_answer(text, domain)
         if answer["has_answer"]:
             yield answer
         searched_text.add(text)
-        questions |= set(get_answer(text)["related_questions"])
+        questions |= set(get_answer(text, domain)["related_questions"])
         questions -= searched_text
 
 
-def get_simple_answer(question: str, depth: bool = False) -> str:
+def get_simple_answer(question: str, depth: bool = False, domain: str="com") -> str:
     """
     return a text as summary answer for the question
 
-    :param str question: asked question
+    :param str question: asked quetion
     :param bool depth: return the answer of first related question
         if no answer found for question
+    :param str domain: specify google domain to improve searching in a native language
     """
-    document = search(question)
+
+    url = f"https://www.google.{domain}/search"
+    document = search(question, url=url)
     featured_snippet = get_featured_snippet_parser(
             question, document)
     if featured_snippet:
@@ -141,7 +163,7 @@ def get_simple_answer(question: str, depth: bool = False) -> str:
         related_questions = get_related_questions(question)
         if not related_questions:
             return ""
-        return get_simple_answer(related_questions[0])
+        return get_simple_answer(related_questions[0], domain)
     return ""
 
 
