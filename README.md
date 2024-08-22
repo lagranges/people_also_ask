@@ -120,7 +120,7 @@ people_also_ask.request.session.set_proxies(
 
 Default domain is ".com", but it doesn't always show good PAA for a keyword in other language than English.
 
-Exampe of usage:
+Example of usage:
 
 ```python
 import people_also_ask
