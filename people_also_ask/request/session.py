@@ -2,6 +2,7 @@ import os
 import logging
 import requests
 import traceback
+from fake_useragent import UserAgent
 
 from people_also_ask.tools import retryable
 from itertools import cycle
@@ -26,12 +27,13 @@ logging.basicConfig()
 semaphore = CallingSemaphore(
     NB_REQUESTS_LIMIT, NB_REQUESTS_DURATION_LIMIT
 )
-HEADERS = {
-    'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-    " AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/84.0.4147.135 Safari/537.36"
-}
 
+ua = UserAgent()
+user_agent = ua.getRandom
+
+HEADERS = {
+    'User-Agent': user_agent['useragent']
+}
 
 logger = logging.getLogger(__name__)
 
@@ -53,8 +55,10 @@ class ProxyGeneator:
         if not self.proxies:
             return {}
         proxy = next(self.iter_proxy)
+        if not proxy.startswith("https"):
+            proxy = f"http://{proxy}"
         return {
-            "http": proxy
+            "https": proxy
         }
 
 
