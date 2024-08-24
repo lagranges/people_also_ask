@@ -80,12 +80,14 @@ def get_related_questions(text: str, max_nb_questions: Optional[int] = None, dom
     if max_nb_questions is None:
         return _get_related_questions(text, domain=domain)
     nb_question_regenerated = 0
-    questions = set()
+    questions = []
     for question in generate_related_questions(text, domain=domain):
-        if nb_question_regenerated > max_nb_questions:
+        if len(set(questions)) >= max_nb_questions:
             break
-        questions.add(question)
+        questions.append(question)
         nb_question_regenerated += 1
+
+    return list(OrderedDict.fromkeys(questions))
     return list(questions)
 
 
