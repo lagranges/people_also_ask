@@ -115,3 +115,23 @@ people_also_ask.request.session.set_proxies(
     )
 )
 ```
+
+### Using google domain different than global
+
+Default domain is ".com", but it doesn't always show good PAA for a keyword in other language than English.
+
+Example of usage:
+
+```python
+import people_also_ask
+
+keyword = "kawa"
+paa = people_also_ask.get_related_questions(text=keyword, max_nb_questions=10, domain="pl")
+print(paa)
+```
+Output:
+```python
+['Na co dobra jest kawa?', 'Jakie są wady picia kawy?', 'Kiedy kawa jest zdrowa?', 'Jakie są minusy picia kawy?', 'Na co wpływa kawa?', 'Na jakie choroby pomaga kawa?', 'Jaka kawa jest najlepsza?', 'Jakie skutki uboczne ma kawa?', 'Jaka kawa ma najlepszy smak?', 'Jaka kawa smakuje dobrze?', 'Na co pomaga picie kawy?']
+```
+
+
