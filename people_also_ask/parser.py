@@ -287,7 +287,7 @@ class MultipleCardsFeaturedSnippetTag(FeaturedSnippetParser):
         return {
             "heading": tag_card.find("div", {"role": "heading"}).text,
             "title": tag_card.cite.text,
-            "link": tag_card.a["href"],
+            "link": tag_card.find('a', attrs={'data-jsarwt': True})['href'],
             "raw_text": get_raw_text(tag_card),
         }
 
