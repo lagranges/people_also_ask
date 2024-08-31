@@ -123,14 +123,23 @@ def get_answer(question: str, domain: str="com") -> Dict[str, Any]:
     return res
 
 
-def generate_answer(text: str, domain: str="com") -> Generator[dict, None, None]:
+def generate_answer(text: str, domain: str="com", enhance_search=True) -> Generator[dict, None, None]:
     """
     generate answers of questions related to text
 
     :param str text: text to search
     :param str domain: specify google domain to improve searching in a native language
     """
-    answer = get_answer(text, domain)
+    if enhance_search:
+        tries = 0
+        answer = {"link": False}
+    
+        while not answer["link"] and tries < 4:
+            answer = get_answer(text, domain)
+            tries += 1
+    else:
+        answer = get_answer(text, domain)
+     
     questions = set(answer["related_questions"])
     searched_text = set(text)
     if answer["has_answer"]:
